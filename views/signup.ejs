@@ -1,0 +1,220 @@
+<%- include('header'); -%>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+        <div class="container">
+            <a class="navbar-brand" href="index.html"> Blood Bank <i class="icon-heart" aria-hidden="true"></i></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="oi oi-menu"></span> Menu
+      </button>
+
+         
+    </nav>
+    <!-- END nav -->
+
+    <div class="hero-wrap js-fullheight">
+        <div class="overlay"></div>
+        <div id="particles-js"></div>
+        <div class="py-3 wrap-login100 pcontainInnerHoriz">
+            <form class="login100-form validate-form" method="post" action="/signup" id="ff">
+                <!--Title-->
+                <% if (message.length > 0) { %>
+                    <div class="alert alert-success col-sm-12"><%= message %></div>
+                    <% } %>
+                <span class="login100-form-title pb-2 pt-2">
+					Sign Up
+                </span>
+                <div id="personalPage">
+                    <div class="numberPage text-center">
+                        <span>1</span>
+                    </div>
+                    <label class="pt-4 pb-3 infoType">Personal Information
+                </label>
+                    <div class="row justify-content-between">
+                        <div class="col-md-6">
+                            <label class="container">Name
+                        </label>
+                            <div class="wrap-input100 mb-2">
+                                <input class="input100"  name="name" type="text" required>
+                                <span class="focus-input100"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="container">Age
+                        </label>
+                            <div class="wrap-input100 mb-2">
+                                <input class="input100" name ="age" type="number" required>
+                                <span class="focus-input100"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class=col-md-6>
+                            <label>State
+                        </label>
+                            <div class="wrap-input100 mb-2">
+                                <input class="input100" type="text" required>
+                                <span class="focus-input100"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div>
+                                <label>City / Town
+                            </label>
+                                <select id="cityName" name="city" class="d-block" required>
+                                <option value="" selected style="display:none">Choose your city</option>
+                                <option value="Cairo">Cairo</option>
+                                <option value="Giza">Giza</option>
+                                <option value="Alex">Alex</option>
+                              </select>
+                            </div>
+                            <div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Login Button-->
+                    <div class="mt-5 text-center">
+                        <span class="nextBtn" onclick="goContactPage()">
+						Next
+                    </span>
+                    </div>
+                </div>
+                <div id="contactPage">
+                    <div class="numberPage text-center">
+                        <span>2</span>
+                    </div>
+                    <label class="pt-4 pb-3 infoType">Contact Information
+                    </label>
+                    
+                    <label class="container">Address
+                            </label>
+                    <div class="wrap-input100 mb-2">
+                        <input class="input100" name ="address" type="text" required>
+                        <span class="focus-input100"></span>
+                    </div>
+                    <div class="mt-5 text-center">
+                        <span class="nextBtn" onclick="goAccountPage()">
+                                    Next
+                                </span>
+                    </div>
+                </div>
+                <div id="accountPage">
+                    <div class="numberPage text-center">
+                        <span>3</span>
+                    </div>
+                    <label class="pt-4 pb-3 infoType">Account Information
+                    </label>
+                    
+                    <label class="container">Password
+                    </label>
+                    <div class="wrap-input100 mb-2">
+                        <input class="input100" name ="password" type="password" required>
+                        <span class="focus-input100"></span>
+                    </div>
+                    
+                    <!--Login Button-->
+                    <div class="mt-5 text-center">
+                        <span class="nextBtn" onclick="goMedicalPage()">
+                            Next
+                        </span>
+                    </div>
+                </div>
+               
+               
+                <div id="medicalPage" >
+                    <div class="numberPage text-center">
+                        <span>4</span>
+                    </div>
+                    <label class="pt-4 pb-3 infoType">Medical Information
+                    </label>
+                    <div class="row justify-content-between">
+                        <div class=col-md-6>
+                            <label>Height
+                        </label>
+                            <div class="wrap-input100 mb-2">
+                                <input class="input100" name ="ht" type="number" required>
+                                <span class="focus-input100"></span>
+                            </div>
+                        </div>
+                        <div class=col-md-6>
+                            <label>Weight
+                        </label>
+                            <div class="wrap-input100 mb-2">
+                                <input class="input100" name ="wt" type="number" required>
+                                <span class="focus-input100"></span>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                        <div class=col-md-6>
+                            <label>BP
+                        </label>
+                            <div class="wrap-input100 mb-2">
+                                <input class="input100"  name ="bp" type="number" required>
+                                <span class="focus-input100"></span>
+                            </div>
+                        </div>
+                        <div class=col-md-6>
+                            <label>Sugar
+                        </label>
+                            <div class="wrap-input100 mb-2">
+                                <input class="input100" name ="sugar" type="number" required>
+                                <span class="focus-input100"></span>
+                            </div>
+                        </div>
+                        </div>
+                        
+                    <div class="row">
+                        
+                        <div class="col-md-6">
+                           
+                            <label>Ailments
+                        </label>
+                        
+                        <div class="wrap-input100 mb-2">
+                            <input class="input100"  name="ailments" type="text" required>
+                            <span class="focus-input100"></span>
+                        </div></div>
+                       
+                            
+                    <div class="col-md-6">
+                      
+                            <label>Blood type:
+                        </label>
+                        <div>
+                        <select id="cityName" name="type" class="d-block" required>
+                            <option value="" selected style="display:none">Choose one</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                          </select>
+                        
+                        
+                        </div>
+                        <div>
+               </div>
+                    </div>
+                    
+                </div>
+                
+                    <!--Login Button-->
+                    <div class="container-login100-form-btn pt-3">
+                        <button id="btn-signup" type="submit" class="btn btn-info"><i class="icon-hand-right"></i>   Sign Up</button>
+                        
+                    </div>
+                </div>
+              
+
+        <!--Login Button-->
+            </div>
+    <!--End Login Button-->
+</form>
+    </div>
+</div>
+
+<%- include('footer'); -%>
