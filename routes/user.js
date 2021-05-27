@@ -186,18 +186,12 @@ exports.request=function(req,res){
                 var status="Pending";
                 var uid=req.params.id;
                 var reqid;
-                var date_time;
                 db.query("SELECT MAX(requestID) as reqID from REQUESTS",(err,result,fields)=>{
                     if(result==={}){
                         reqid=1;
                     }
                     reqid=result[0].reqID+1;
-                    db.query("SELECT NOW() as dt;",(err,result,fields)=>{
-                        date_time=result[0].dt;
-                        console.log(date_time);
-                    })
-                    console.log(date_time);
-                    db.query("INSERT INTO REQUESTS Values("+mysql.escape(reqid)+","+mysql.escape(uid)+","+mysql.escape(bbid)+","+mysql.escape(type)+","+mysql.escape(comp)+","+mysql.escape(status)+","+mysql.escape(area)+","+mysql.escape(date_time)+","+mysql.escape(units)+");",(err,result,fields)=>{
+                    db.query("INSERT INTO REQUESTS Values("+mysql.escape(reqid)+","+mysql.escape(uid)+","+mysql.escape(bbid)+","+mysql.escape(type)+","+mysql.escape(comp)+","+mysql.escape(status)+","+mysql.escape(area)+",NOW(),"+mysql.escape(units)+");",(err,result,fields)=>{
                         if(err){
                             console.log(err);
                             res.end(err['sqlMessage']);
