@@ -159,24 +159,26 @@ exports.donate=function(req,res){
         }
     }
     else{
-        var {id}=req.user.UserID;
-        console.log("id=",id);
-        var message='';
-        res.render('blood_donor.ejs',{id:id,message:message});
+        if(found==1){
+            var {id}=req.user.UserID;
+            console.log("id=",id);
+            var message='';
+            res.render('blood_donor.ejs',{id:id,message:message});
+        }
     }    
 };
 
 exports.request=function(req,res){
     var id;
     var found=0;
+    if(req.isAuthenticated()) {
+        console.log('you hit the authentication endpoint\n');
+        const id=req.user.UserID;
+        found=1;
+    } else {
+        res.redirect('/ulogin',{message:''});
+    }
     if(req.method=="POST"){
-        if(req.isAuthenticated()) {
-            console.log('you hit the authentication endpoint\n');
-            const id=req.user.UserID;
-            found=1;
-        } else {
-            res.redirect('/ulogin',{message:''});
-        }
         if(found==1){
             const {type,comp,units,area,name}=req.body;
             db.query("SELECT BloodbankID as bid FROM blood_bank WHERE NAME="+mysql.escape(name)+";",(err,result,fields)=>{
@@ -210,9 +212,105 @@ exports.request=function(req,res){
         }
     }
     else{
-        var {id}=req.user.UserID;
-        console.log("id=",id);
-        var message='';
-        res.render('blood_request.ejs',{id:id,message:message});
+        if(found==1){
+            var {id}=req.user.UserID;
+            console.log("id=",id);
+            var message='';
+            res.render('blood_request.ejs',{id:id,message:message});
+        }
     }  
 };
+
+exports.available=function(req,res){
+    var found=0;
+    if(req.isAuthenticated()) {
+        console.log('you hit the authentication endpoint\n');
+        const id=req.user.UserID;
+        found=1;
+    } else {
+        res.redirect('/ulogin',{message:''});
+    }
+    if(req.method=="GET"){ 
+        if(found==1){        
+            let type=req.query.bloodtype;
+            let comp=req.query.bloodcomp;
+            let state=req.query.state;
+            let city=req.query.city;
+            console.log(type);
+            console.log(comp);
+            console.log(state);
+    
+            db.query("SELECT U_AVAIL("+mysql.escape(city)+","+mysql.escape(state)+","+mysql.escape(type)+","+mysql.escape(comp)+") as avail;",(err,result,fields)=>{
+                if(err){
+                    console.log(err);
+                    res.end(err['sqlMessage']);
+                }
+                console.log("Blood details shown");
+                //res.send(JSON.parse(result[0].avail));
+                res.render('disp.ejs',{data:JSON.parse(result[0].avail)});
+            });
+        }
+    }
+    else{
+        res.render('blood_stock.ejs');
+    }
+};
+
+exports.campavail=function(req,res){
+    var found=0;
+    if(req.isAuthenticated()) {
+        console.log('you hit the authentication endpoint\n');
+        const id=req.user.UserID;
+        found=1;
+    } else {
+        res.redirect('/ulogin',{message:''});
+    }
+    if(req.method=="GET"){
+        if(found==1){
+            let uid=req.params.id;
+            db.query("SELECT city,state FROM USER WHERE Userid="+mysql.escape(uid)+";",(err,result,fields)=>{
+                if(err){
+                    console.log(err);
+                    res.end(err['sqlMessage']);
+                }
+                console.log(result[0].state);
+                city=result[0].city;
+                state=result[0].state;
+                db.query("SELECT *  FROM CAMPS WHERE City="+mysql.escape(city)+"AND State="+mysql.escape(state)+";",(err,resu,fields)=>{
+                    if(err){
+                        console.log(err);
+                        res.end(err['sqlMessage']);
+                    }
+                    //display camps
+                    console.log(resu);
+                    res.send(resu);
+                });
+            });
+        }
+        //display all camps with an option
+    }
+    else{
+        res.render('blood_camp.ejs');
+    }
+};
+
+exports.logout=function(req,res){
+    var found=0;
+    if(req.isAuthenticated()) {
+        console.log('you hit the authentication endpoint\n');
+        const id=req.user.UserID;
+        found=1;
+    } else {
+        res.redirect('/ulogin',{message:''});
+    }
+    if(req.method=="GET"){
+        if(found==1){
+            req.session.destroy(function(err) {
+            return res.redirect('/login',{message:''});
+            })  
+        }
+        else{
+            res.redirect('/login',{message:''});
+        }
+    }
+ };
