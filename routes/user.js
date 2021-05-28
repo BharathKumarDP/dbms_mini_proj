@@ -61,7 +61,7 @@ exports.login=function(req,res,next){
     else{
         console.log('Inside GET /login callback')
         console.log(req.sessionID)
-        res.send(`You got the login page!\n`)
+       // res.send(`You got the login page!\n`)
         res.render('index.ejs',{message:''});
     }
 };
@@ -116,20 +116,20 @@ exports.history=function(req,res){
 exports.donate=function(req,res){
     var id;
     var found=0;
+    if(req.isAuthenticated()) {
+       // res.send('you hit the authentication endpoint\n');
+        const id=req.user.UserID;
+        console.log(id);
+        found=1;
+    }
+    else {
+        res.redirect('/ulogin',{message:''});
+    }
     if(req.method=="POST"){
-        if(req.isAuthenticated()) {
-            res.send('you hit the authentication endpoint\n');
-            const id=req.user.UserID;
-            found=1;
-        }
-        else {
-            res.redirect('/ulogin',{message:''});
-        }
         if(found==1){
                 var messgae='';
                 var {date,bname}=req.body;
                 console.log(bname);
-                console.log(typeof(bname));
                 db.query("SELECT MAX(DonationID) as did FROM donations;",(err,result,fields)=>{
                 if(err){
                     console.log(err);
@@ -137,18 +137,18 @@ exports.donate=function(req,res){
                 }
                 let did=result[0].did+1;
                 //console.log(did,"created");
-                db.query("SELECT BloodBankID FROM blood_bank WHERE Name="+mysql.escape(bname)+";",(err,result,fields)=>{
-                    let bbid=result[0].BloodbankID;
+                db.query("SELECT BloodBankID as bid FROM blood_bank WHERE Name="+mysql.escape(bname)+";",(err,result,fields)=>{
+                    let bbid=result[0].bid;
                     let status="Pending";
-                    let uid=req.params.id;
-                    //console.log(uid);
+                    let uid=req.user.UserID;
+                    console.log(bbid);
                     db.query("INSERT INTO donations Values("+mysql.escape(did)+","+mysql.escape(uid)+","+mysql.escape(bbid)+","+mysql.escape(date)+","+mysql.escape(status)+");",(err,result,fields)=>{
                         if(err){
                             console.log(err);
                             res.end(err['sqlMessage']);
                         }
                         message="Donation request submitted";
-                        res.redirect("/profile",{message:message});
+                        res.redirect("/profile");
                         //res.end("Success");
                         //alert blood bank,increment donation counts
                         //trigger to increment points
@@ -160,7 +160,7 @@ exports.donate=function(req,res){
     }
     else{
         if(found==1){
-            var {id}=req.user.UserID;
+            var id=req.user.UserID;
             console.log("id=",id);
             var message='';
             res.render('blood_donor.ejs',{id:id,message:message});
@@ -184,7 +184,7 @@ exports.request=function(req,res){
             db.query("SELECT BloodbankID as bid FROM blood_bank WHERE NAME="+mysql.escape(name)+";",(err,result,fields)=>{
                 var bbid=result[0].bid;
                 var status="Pending";
-                var uid=req.params.id;
+                var uid=req.user.UserID;
                 var reqid;
                 db.query("SELECT MAX(requestID) as reqID from REQUESTS",(err,result,fields)=>{
                     if(result==={}){
@@ -197,7 +197,8 @@ exports.request=function(req,res){
                             res.end(err['sqlMessage']);
                         }
                         console.log("Blood request submitted");
-                        res.send("Success");
+                        res.redirect("/profile");
+                        //res.send("Success");
                         //alert blood bank,increment req counts(trigger)
                     });
 
@@ -215,12 +216,25 @@ exports.request=function(req,res){
     }  
 };
 
+exports.avail_form=function(req,res){
+    var found=0;
+    if(req.isAuthenticated()) {
+        console.log('you hit the authentication endpoint\n');
+        const id=req.user.UserID;
+        found=1;
+        res.render('blood_stock.ejs',{id:id,message:''});
+    } else {
+        res.redirect('/ulogin',{message:''});
+    }
+}
+
 exports.available=function(req,res){
     var found=0;
     if(req.isAuthenticated()) {
         console.log('you hit the authentication endpoint\n');
         const id=req.user.UserID;
         found=1;
+      //  res.render('blood_stock.ejs',{id:id,message:''});
     } else {
         res.redirect('/ulogin',{message:''});
     }
@@ -250,6 +264,7 @@ exports.available=function(req,res){
     }
 };
 
+
 exports.campavail=function(req,res){
     var found=0;
     if(req.isAuthenticated()) {
@@ -261,7 +276,7 @@ exports.campavail=function(req,res){
     }
     if(req.method=="GET"){
         if(found==1){
-            let uid=req.params.id;
+            let uid=req.user.UserID;
             db.query("SELECT city,state FROM USER WHERE Userid="+mysql.escape(uid)+";",(err,result,fields)=>{
                 if(err){
                     console.log(err);

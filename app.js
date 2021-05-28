@@ -1,5 +1,5 @@
 const express = require('express')
-, user = require('./user.js')
+, user = require('./routes/user.js')
 , http = require('http')
 , path = require('path');
 const keys = require('./keys.js');
@@ -237,7 +237,6 @@ app.get("/auth/google", passport.authenticate("google", {
 }));
 
 app.get("/auth/google/redirect",passport.authenticate("google",{ failureRedirect: '/login' }),(req,res)=>{
-    console.log("here");
     if(!req.user){
         console.log("error");
         res.redirect("/signup");
@@ -251,7 +250,7 @@ app.get("/auth/google/redirect",passport.authenticate("google",{ failureRedirect
 //user
 app.get('/usignup', user.signup);
 app.post('/usignup', user.signup);
-app.get('/ulogin', user.login_get);
+app.get('/ulogin', user.login);
 app.post('/ulogin', user.login);
 app.get('/profile', user.dashboard);
 app.get('/health_history',user.history);
@@ -262,15 +261,16 @@ app.post('/udonate',user.donate);
 app.get('/urequest',user.request);
 app.post('/urequest',user.request);
 app.get('/uavailable/:id',user.available);
-app.get('/campavail/:id',user.campavail);
+app.get('/display_uavailable',user.avail_form);
+app.get('/blood_camp.html',user.campavail);
 
 
 //Bbank
-app.get('/bsignup', user.bsignup);
+/*app.get('/bsignup', user.bsignup);
 app.post('/bsignup', user.bsignup);
 app.get('/blogin', user.blogin);
 app.post('/blogin', user.blogin);
-
+*/
 app.listen(3000,()=>{
     console.log('app is listening on port 3000');
 });
