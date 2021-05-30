@@ -1,8 +1,10 @@
 const express = require('express')
 , user = require('./routes/user.js')
+,bbank=require('./routes/bbank.js')
 , http = require('http')
 , path = require('path');
 const keys = require('./keys.js');
+const cors=require('cors');
 const session = require('express-session');
 const uuid=require('uuid').v4
 const FileStore = require('session-file-store')(session);
@@ -24,8 +26,8 @@ var con=mysql.createConnection({
     user:"root",
     password:"bharatH?718",
     database:"Bbank",
-    insecureAuth:true
-   
+    insecureAuth:true,
+    timezone: '+05:30'
 });
 con.connect(function(err){
     if(!err) {
@@ -62,7 +64,7 @@ passport.use(
                 return done(null,false);
             }
             else{
-               return  done(null,result[0]);
+               return done(null,result[0]);
             }
         });
     }
@@ -101,7 +103,7 @@ passport.use('user',new LocalStrategy(
                 return done(null,false,{message:"Wrong password"});
           
             }   
-       })
+        })
        })
     }
 ));
@@ -131,6 +133,7 @@ passport.use('bbank',new LocalStrategy(
             }
             if(found==1){
                 console.log('Local strategy returned true')
+                console.log(result[0]);
                 return done(null, bank)
             }
             else{
@@ -153,9 +156,10 @@ passport.serializeUser((obj, done) => {
         console.log(a_id);
         done(null,a_id);
     }
-    else{
+    else if(Object.keys(obj).length==12){
         console.log('Inside serializeUser callback. Bbank id is save to the session file store here');
-        var b_id='b'+obj.UserID;//to diff bank
+        console.log(obj);
+        var b_id='b'+obj.BloodBankID;//to diff bank
         console.log(b_id);
         done(null,b_id);
     }
@@ -187,6 +191,7 @@ passport.deserializeUser((id, done) => {
                 res.end(err['sqlMessage']);
             }
             const obj=result[0];
+            console.log(obj);
             done(null,obj);
         })
     }
@@ -195,8 +200,7 @@ passport.deserializeUser((id, done) => {
 //app.set('port', process.env.PORT || 3000);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
+
 app.use(express.static(path.join(__dirname, 'public')));
 //session
 app.use(session({
@@ -205,11 +209,14 @@ app.use(session({
         console.log(req.sessionID)
         return uuid() // use UUIDs for session IDs
     },
-    store: new FileStore(),
-    secret: 'dbmsproj',
+    store: new FileStore({logFn: function(){}}),
+    secret:'dbmsproj',
     resave: false,
     saveUninitialized: true
 }))
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+app.use(cors());
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -227,23 +234,33 @@ app.get('/user', (req, res) => {
     console.log("user Session id is",req.sessionID);
     res.render('user');
 });
+app.get('/bbank', (req, res) => {
+    console.log("blood bank Session id is",req.sessionID);
+    res.render('bbank');
+});
 app.get('/msg',(req,res)=>{
    res.render('msg');
 });
+app.get('/bmsg',(req,res)=>{
+    res.render('bmsg');
+ });
 
 //google auth endpoints
 app.get("/auth/google", passport.authenticate("google", {
     scope: ["profile", "email"]
 }));
 
-app.get("/auth/google/redirect",passport.authenticate("google",{ failureRedirect: '/login' }),(req,res)=>{
+app.get("/auth/google/redirect",passport.authenticate("google",{ failureRedirect: '/ulogin' }),(req,res)=>{
     if(!req.user){
         console.log("error");
-        res.redirect("/signup");
+        res.redirect('/ulogin?error=' + encodeURIComponent('Wrong email'));
     }
     else{
-     //   res.send(req.user);
-        return res.redirect("/profile");
+        console.log("here");
+        console.log(req.user);
+        req.session.save(() => {
+            res.redirect('/uprofile');
+        })
     }
 });
 
@@ -252,25 +269,45 @@ app.get('/usignup', user.signup);
 app.post('/usignup', user.signup);
 app.get('/ulogin', user.login);
 app.post('/ulogin', user.login);
-app.get('/profile', user.dashboard);
+app.get('/uprofile', user.dashboard);
 app.get('/health_history',user.history);
-app.get('/logout', user.logout);
+app.get('/ulogout', user.logout);
 
 app.get('/udonate',user.donate);
 app.post('/udonate',user.donate);
 app.get('/urequest',user.request);
 app.post('/urequest',user.request);
-app.get('/uavailable/:id',user.available);
+app.get('/uavailable',user.available);
+
 app.get('/display_uavailable',user.avail_form);
-app.get('/blood_camp.html',user.campavail);
+app.get('/campavail',user.campavail);
 
 
 //Bbank
-/*app.get('/bsignup', user.bsignup);
-app.post('/bsignup', user.bsignup);
-app.get('/blogin', user.blogin);
-app.post('/blogin', user.blogin);
-*/
+app.get('/bsignup', bbank.bsignup);
+app.post('/bsignup',  bbank.bsignup);
+app.get('/blogin',  bbank.blogin);
+app.post('/blogin',  bbank.blogin);
+
+app.get('/bprofile', bbank.bdashboard);
+app.get('/campreg',  bbank.campreg);
+app.post('/campreg',  bbank.campreg);
+
+app.get('/bavailable',  bbank.bavailable);
+
+//donations
+app.get('/bdonations',  bbank.bdonations);//list donations
+app.get('/bcomp_donations/:id',(req,res)=>{ //get units and comp for a part donation
+    res.render('get_don_info.ejs',{message:req.params.id});
+});
+app.post('/bcomp_donations/:id',bbank.bcomp_donations);//complete the donation
+//requests
+app.get('/brequests',  bbank.brequests);//list requests
+app.get('/bserve_requests',  bbank.bserve_requests);//serve requests
+
+
+
+app.get('/blogout', bbank.blogout);
 app.listen(3000,()=>{
     console.log('app is listening on port 3000');
 });

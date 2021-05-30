@@ -1,7 +1,7 @@
 DROP FUNCTION IF EXISTS U_AVAIL;
 DELIMITER $$
 CREATE FUNCTION U_AVAIL
-(city varchar(20),state varchar(20),b_type varchar(20),b_comp varchar(20))
+(city varchar(255),state varchar(255),b_type varchar(255),b_comp varchar(255))
 RETURNS JSON
 DETERMINISTIC
 BEGIN

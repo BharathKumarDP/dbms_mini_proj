@@ -4,10 +4,10 @@ CREATE FUNCTION SERVE_REG(bbid int)
 RETURNS INT
 DETERMINISTIC
 BEGIN  
-    DECLARE l_uid,l_rid,l_bid,l_dist,l_units INT;
-    DECLARE l_address,l_status varchar(20);
+    DECLARE l_uid,l_rid,l_bid,l_dist,l_units,l_pid INT;
+    DECLARE l_address,l_status varchar(255);
     DECLARE l_unit_part,l_lat,l_longit INT;
-    DECLARE l_type,l_comp varchar(20);
+    DECLARE l_type,l_comp varchar(255);
     DECLARE l_count,i INT DEFAULT 0;
     DECLARE tot_units INT;
     DECLARE data_obj JSON;
@@ -25,7 +25,7 @@ BEGIN
             SET FLAG1=0;
             LEAVE blood_loop;
         END IF;
-        SELECT UserID,blood_type,blood_component,Units INTO l_uid,l_type,l_comp,l_units FROM Requests WHERE RequestID=l_rid; 
+        SELECT UserID,blood_type,blood_component,Units,ParentID INTO l_uid,l_type,l_comp,l_units,l_pid FROM Requests WHERE RequestID=l_rid; 
         SELECT lat,longit INTO l_lat,l_longit FROM blood_bank WHERE BloodbankID=bbid;
         SELECT B_AVAIL_T(bbid,l_type,l_comp) INTO data_obj;
         SELECT JSON_EXTRACT(data_obj,'$.Units') INTO tot_units;
@@ -46,8 +46,8 @@ BEGIN
                     LEAVE loc_loop;
                 END IF;
                 SET l_status="Pending";
-                INSERT INTO Requests(UserID,bloodBankID,blood_type,blood_component,status,area,date_time,Units)
-                VALUES (l_uid,l_bid,l_type,l_comp,l_status,l_address,NOW(),l_units);
+                INSERT INTO Requests(UserID,bloodBankID,blood_type,blood_component,status,area,date_time,Units,ParentID)
+                VALUES (l_uid,l_bid,l_type,l_comp,l_status,l_address,NOW(),l_units,l_pid);
             END LOOP loc_loop;
             DELETE FROM Requests WHERE RequestID=l_rid;
             END block2;
@@ -62,6 +62,7 @@ BEGIN
                 IF FLAG2 THEN
                     IF l_units = 0 THEN
                     UPDATE Requests SET status="Done" WHERE RequestID=l_rid;
+                    UPDATE Requests SET status="Removed" where ParentID=l_pid;
                     SET l_count=l_count+1;
                     LEAVE blood_loop2;
                     END IF; 
@@ -73,6 +74,7 @@ BEGIN
                     SET l_unit_part=l_unit_part-l_units;
                     UPDATE Blood SET blood_units=l_unit_part WHERE BloodID=l_bid;
                     UPDATE Requests SET status="Done" WHERE RequestID=l_rid;
+                    UPDATE Requests SET status="Removed" where ParentID=l_pid;
                     SET l_count=l_count+1;
                     LEAVE blood_loop2;
                 END IF;
@@ -85,6 +87,7 @@ BEGIN
             END block1;
         END IF;
     END LOOP blood_loop;
+    DELETE from Requests where status="Removed";
     RETURN l_count;
 END$$
 DELIMITER ;    

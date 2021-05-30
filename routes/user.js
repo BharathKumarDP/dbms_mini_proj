@@ -22,7 +22,7 @@ exports.signup=function(req,res){
                             res.end(err['sqlMessage']);
                         }
                         message = "Your account has been created succesfully.";
-			           res.render('msg.ejs',{message: message});
+                        res.render('msg.ejs',{message:message,id:id});
                     });
                     db.query("INSERT INTO health_history Values("+mysql.escape(id)+","+mysql.escape(type)+","+mysql.escape(sugar)+","+mysql.escape(bp)+","+mysql.escape(ht)+","+mysql.escape(wt)+","+mysql.escape(ailments)+",NULL);",(err,result,fields)=>{
                         if(err){
@@ -36,7 +36,7 @@ exports.signup=function(req,res){
         });
     }
     else{
-        res.render('usignup',{message:message});
+        res.render('signup',{message:message});
     }       
 };
 
@@ -48,12 +48,20 @@ exports.login=function(req,res,next){
         req.login(user, (err) => {
           if(req.user){
             console.log(`req.user: ${JSON.stringify(req.user)}`)
-            res.redirect('/profile');
+            req.session.save(() => {
+                res.redirect('/uprofile');
+            })
           }
-          else{
-                message = 'You have entered invalid  password.';
-                res.render('index.ejs',{message: message});
-                res.redirect('/ulogin',{message:message});
+          else if(!req.user){ 
+            message=info.message;
+            console.log(message);
+            res.redirect('/usignup?error=' + encodeURIComponent(message));
+            return;
+          }
+          else{   
+            message=info.message;
+            res.render('index.ejs', {message: message} );
+                
           }
         })
       })(req, res, next);
@@ -73,7 +81,8 @@ exports.dashboard=function(req,res){
         res.render('user_dashboard.ejs',{id:id});
       } 
       else {
-        res.redirect('/ulogin',{message:''});
+        res.redirect('/ulogin?error=' + encodeURIComponent('Not logged in'));
+        return;
       }
 }; 
 
@@ -106,9 +115,11 @@ exports.history=function(req,res){
             console.log(obj);
             res.send(obj);
         })
+        res.render('disp_health.ejs',{data:JSON.parse(obj)});
       } 
       else {
-         res.redirect('/ulogin',{message:''});
+        res.redirect('/ulogin?error=' + encodeURIComponent('Not logged in'));
+        return;
       }
 
 }
@@ -123,8 +134,10 @@ exports.donate=function(req,res){
         found=1;
     }
     else {
-        res.redirect('/ulogin',{message:''});
+        res.redirect('/ulogin?error=' + encodeURIComponent('Not logged in'));
+        return;
     }
+
     if(req.method=="POST"){
         if(found==1){
                 var messgae='';
@@ -137,8 +150,13 @@ exports.donate=function(req,res){
                 }
                 let did=result[0].did+1;
                 //console.log(did,"created");
-                db.query("SELECT BloodBankID as bid FROM blood_bank WHERE Name="+mysql.escape(bname)+";",(err,result,fields)=>{
-                    let bbid=result[0].bid;
+                db.query("SELECT BloodBankID as bid FROM blood_bank WHERE Name="+mysql.escape(bname)+";",(err,ress,fields)=>{
+                    if(err){
+                        console.log(err);
+                        res.end(err['sqlMessage']);
+                    }
+                    console.log(ress);
+                    let bbid=ress[0].bid;
                     let status="Pending";
                     let uid=req.user.UserID;
                     console.log(bbid);
@@ -148,8 +166,8 @@ exports.donate=function(req,res){
                             res.end(err['sqlMessage']);
                         }
                         message="Donation request submitted";
-                        res.redirect("/profile");
-                        //res.end("Success");
+                        res.redirect('/uprofile?msg=' + encodeURIComponent('Donation request submitted'));
+                       // console.log(message);
                         //alert blood bank,increment donation counts
                         //trigger to increment points
                     });
@@ -163,7 +181,11 @@ exports.donate=function(req,res){
             var id=req.user.UserID;
             console.log("id=",id);
             var message='';
-            res.render('blood_donor.ejs',{id:id,message:message});
+            res.render('blood_donor.ejs',{message:message});
+        }
+        else {
+            res.redirect('/ulogin?error=' + encodeURIComponent('Not logged in'));
+            return;
         }
     }    
 };
@@ -176,7 +198,7 @@ exports.request=function(req,res){
         const id=req.user.UserID;
         found=1;
     } else {
-        res.redirect('/ulogin',{message:''});
+        res.redirect('/ulogin?error=' + encodeURIComponent('Not logged in'));
     }
     if(req.method=="POST"){
         if(found==1){
@@ -197,7 +219,8 @@ exports.request=function(req,res){
                             res.end(err['sqlMessage']);
                         }
                         console.log("Blood request submitted");
-                        res.redirect("/profile");
+                        //res.send("Success");
+                        res.redirect('/uprofile?msg=' + encodeURIComponent('Blood request submitted'));
                         //res.send("Success");
                         //alert blood bank,increment req counts(trigger)
                     });
@@ -211,7 +234,7 @@ exports.request=function(req,res){
             var {id}=req.user.UserID;
             console.log("id=",id);
             var message='';
-            res.render('blood_request.ejs',{id:id,message:message});
+            res.render('blood_request.ejs',{message:message});
         }
     }  
 };
@@ -222,9 +245,10 @@ exports.avail_form=function(req,res){
         console.log('you hit the authentication endpoint\n');
         const id=req.user.UserID;
         found=1;
-        res.render('blood_stock.ejs',{id:id,message:''});
+        res.render('blood_stock.ejs');
     } else {
-        res.redirect('/ulogin',{message:''});
+        res.redirect('/ulogin?error=' + encodeURIComponent('Not logged in'));
+        return;
     }
 }
 
@@ -235,8 +259,10 @@ exports.available=function(req,res){
         const id=req.user.UserID;
         found=1;
       //  res.render('blood_stock.ejs',{id:id,message:''});
-    } else {
-        res.redirect('/ulogin',{message:''});
+    } 
+    else {
+        res.redirect('/ulogin?error=' + encodeURIComponent('Not logged in'));
+        return;
     }
     if(req.method=="GET"){ 
         if(found==1){        
@@ -272,7 +298,8 @@ exports.campavail=function(req,res){
         const id=req.user.UserID;
         found=1;
     } else {
-        res.redirect('/ulogin',{message:''});
+        res.redirect('/ulogin?error=' + encodeURIComponent('Not logged in'));
+        return;
     }
     if(req.method=="GET"){
         if(found==1){
@@ -292,34 +319,24 @@ exports.campavail=function(req,res){
                     }
                     //display camps
                     console.log(resu);
-                    res.send(resu);
+                    res.render('camp_disp.ejs',{data:resu});
                 });
             });
         }
         //display all camps with an option
     }
-    else{
-        res.render('blood_camp.ejs');
-    }
 };
 
 exports.logout=function(req,res){
-    var found=0;
     if(req.isAuthenticated()) {
         console.log('you hit the authentication endpoint\n');
         const id=req.user.UserID;
-        found=1;
-    } else {
-        res.redirect('/ulogin',{message:''});
+        req.session.destroy(function(err) {
+            return res.redirect('/ulogin');
+        })  
     }
-    if(req.method=="GET"){
-        if(found==1){
-            req.session.destroy(function(err) {
-            return res.redirect('/login',{message:''});
-            })  
-        }
-        else{
-            res.redirect('/login',{message:''});
-        }
+    else {
+        res.redirect('/ulogin?error=' + encodeURIComponent('Not logged in'));
+        return;
     }
  };

@@ -1,7 +1,7 @@
 DROP PROCEDURE IF EXISTS UPDATE_DONATIONS;
 DELIMITER $$
 CREATE PROCEDURE UPDATE_DONATIONS
-(IN did INT,IN bid INT,IN units INT,IN comp varchar(20))
+(IN did INT,IN bid INT,IN units INT,IN comp varchar(255))
 BEGIN
     DECLARE b_type varchar(20);
     DECLARE d_date date;

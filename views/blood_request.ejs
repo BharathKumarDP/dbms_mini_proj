@@ -25,7 +25,7 @@
             <% if (message.length > 0) { %>
                 <div class="alert alert-success col-sm-12"><%= message %></div>
                 <% } %>
-            <form class="login100-form validate-form bg-white" method="post" action="/urequest/<%= id %>">
+            <form class="login100-form validate-form bg-white" method="post" action="/urequest">
               
                 <span class="pb-3 pt-3 login100-form-title">
 					Blood Request
@@ -53,20 +53,15 @@
                 </label>
                     <select id="bloodType" class="d-block" name="comp" required> 
                     <option value="" selected style="display:none">Choose one</option>
-                    <option value="11">Whole Blood</option>
-                    <option value="14">Single Donor Platelet</option>
-                    <option value="18">Single Donor Plasma</option>
-                    <option value="28">Sagm Packed Red Blood Cells</option>
-                    <option value="16">Platelet Rich Plasma</option>
-                    <option value="15">Platelet Poor Plasma</option>
-                    <option value="20">Platelet Concentrate</option>
-                    <option value="19">Plasma</option>
-                    <option value="12">Packed Red Blood Cells</option>
-                    <option value="30">Leukoreduced Rbc</option>
-                    <option value="29">Irradiated RBC</option>
-                    <option value="13">Fresh Frozen Plasma</option>
-                    <option value="17">Cryoprecipitate</option>
-                    <option value="21">Cryo Poor Plasma</option>
+                    <option value="Whole Blood">Whole Blood</option>
+                    <option value="Single Donor Platelet">Single Donor Platelet</option>
+                    <option value="Single Donor Plasma">Single Donor Plasma</option>
+                    <option value="Sagm Packed Red Blood Cells">Sagm Packed Red Blood Cells</option>
+                    <option value="Platelet Rich Plasma">Platelet Rich Plasma</option>
+                    <option value="Platelet Poor Plasma">Platelet Poor Plasma</option>
+                    <option value="Platelet Concentrate">Platelet Concentrate</option>
+                    <option value="Plasma">Plasma</option>
+                   
                 </select>
 
                    

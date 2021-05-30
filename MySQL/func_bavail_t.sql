@@ -1,7 +1,7 @@
-DROP FUNCTION IF EXISTS U_AVAIL;
+DROP FUNCTION IF EXISTS B_AVAIL_T;
 DELIMITER $$
 CREATE FUNCTION B_AVAIL_T
-(bid int,b_type varchar(20),b_comp varchar(20))
+(bid int,b_type varchar(255),b_comp varchar(255))
 RETURNS JSON
 DETERMINISTIC
 BEGIN

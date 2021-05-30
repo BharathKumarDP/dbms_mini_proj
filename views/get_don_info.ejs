@@ -1,4 +1,5 @@
 <%- include('header'); -%>
+
 <body>
 
     <!-- NAVBAR -->
@@ -9,42 +10,47 @@
         <span class="oi oi-menu"></span> Menu
       </button>
 
-         
+           
     </nav>
     <!-- END nav -->
 
     <div class="hero-wrap js-fullheight">
         <div class="overlay"></div>
         <div id="particles-js"></div>
-        <div class="py-3 wrap-login200 bg-white pcontainInnerHoriz">
-            <form class="login100-form validate-form bg-white" method="post" action="/blogin">
+        <div class="py-3 wrap-login300 bg-white pcontainInnerHoriz">
+            
+            <form class="login100-form validate-form bg-white" method="post" action="/bcomp_donations/<%= message %>">
                 <!--Title-->
-                <span class="pb-5 pt-3 login100-form-title">
-					Sign In
+                <span class="pb-3 pt-3 login100-form-title">
+					Enter info
 				</span>
                 <!--End Title-->
                 <!--Inputs-->
                
-                <div class="wrap-input200 validate-input m-b-20" data-validate="Enter blood bank id">
-                    <input class="input100" type="number" name="id" placeholder="Blood Bank Name">
+                <div class="wrap-input100 validate-input m-t-10" data-validate="Enter blood units">
+                    <input class="input100" type="number" name="units" placeholder="blood units" required>
                     <span class="focus-input100"></span>
                 </div>
+                <div class="wrap-input100 validate-input m-t-10" data-validate="Enter blood component">
+                    <input class="input100" type="text" name="comp" placeholder="blood component" required>
+                    <span class="focus-input100"></span>
+                </div>
+               
+                
+                
+                
 
-                <div class="wrap-input200 validate-input m-b-20" data-validate="Enter password">
-                    <input class="input100" type="password" name="password" placeholder="password">
-                    <span class="focus-input100"></span>
-                </div>
                 <!--End Inputs-->
                 <!--Remember Me and Forgot Me-->
-              
+                
                 <!--End Remember Me and Forgot Me-->
                 <!--Login Button-->
+                <br>
                 <div class="container-login100-form-btn pt-2">
                     <button class="login100-form-btn btn" type="submit">
-						Log in
+						complete donations
 					</button>
-                   
-                   
+                  
                 </div>
                 <!--End Login Button-->
                 <!--Login with social media-->
@@ -55,4 +61,4 @@
     </div>
     <!-- loader -->
     <%- include('footer'); -%>
-   
+    

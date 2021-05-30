@@ -27,7 +27,7 @@
             <% if (message.length > 0) { %>
                 <div class="alert alert-success col-sm-12"><%= message %></div>
                 <% } %>
-            <form class="login100-form validate-form bg-white" method="get" action="/uavailable/<%= id %>">
+            <form class="login100-form validate-form bg-white" method="get" action="/uavailable">
                 <!--Title-->
                 <span class="pb-3 pt-3 login100-form-title">
                    Availability
@@ -53,7 +53,7 @@
                     <label>Blood Component:
                 </label>
                     <select id="bloodType" class="d-block" name="bloodcomp" required> 
-                    <option value="Choose one" selected style="display:none">Choose one</option>
+                    <option value="" selected style="display:none">Choose one</option>
                     <option value="Whole Blood">Whole Blood</option>
                     <option value="Single Donor Platelet">Single Donor Platelet</option>
                     <option value="Single Donor Plasma">Single Donor Plasma</option>
@@ -71,22 +71,20 @@
                     <label>State:
                 </label>
                          <select id="bloodType" class="d-block"  name ="state" required> 
-                            <option value="Choose one" selected style="display:none">Choose one</option>
-                            <option value="Andaman and Nicobar Islands">Andaman &amp; Nicobar Islands</option>
+                            <option value="" selected style="display:none">Choose one</option>
+                            <option value="TamilNadu">TamilNadu</option>
                                 <option value="Andhra Pradesh">Andhra Pradesh</option>
-                                <option value="Arunachal Pradesh">Arunachal Pradesh</option>
-                                <option value="Assam">Assam</option>
-                                <option value="Bihar">Bihar</option>
-                                <option value="Chandigarh">Chandigarh</option>
+                                <option value="Karnataka">Karnataka</option>
+                                <option value="Kerala">Kerala</option>
+                                <option value="Maharashtra">Maharashtra</option>
+                                <option value="Odisha">Odisha</option>
                                 <option value="Chhattisgarh">Chhattisgarh</option>
-                                <option value="Dadra and Nagar Havel">Dadra &amp; Nagar Haveli</option>
-                                <option value="Daman">Daman &amp; Diu</option>
-                                <option value="Delhi">Delhi</option>
+                                
                     </select>
 
                   
                 </div>
-                <div class="wrap-input100 validate-input m-b-10" data-validate="Enter District">
+                <div class="wrap-input100 validate-input m-t-10" data-validate="Enter District">
                     <input class="input100" type="text" name="city" placeholder="District">
                     <span class="focus-input100"></span>
                 </div>

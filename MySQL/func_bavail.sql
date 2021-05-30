@@ -6,8 +6,8 @@ RETURNS JSON
 DETERMINISTIC
 BEGIN
     DECLARE l_bid INT;
-    DECLARE l_type varchar(20);
-    DECLARE l_comp varchar(20);
+    DECLARE l_type varchar(255);
+    DECLARE l_comp varchar(255);
     DECLARE tot_units INT;
     DECLARE temp INT;
     DECLARE FLAG1 INT DEFAULT 0;

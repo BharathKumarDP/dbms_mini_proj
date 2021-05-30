@@ -174,10 +174,40 @@ button:hover {
 .wrap-login100 {
     width: 600px !important;
     border-radius: 10px;
-    overflow: hidden;
+    overflow: scroll;
     margin: auto;
     position: relative;
-    top: 16% !important;
+    top: 12% !important;
+    left: 0;
+    z-index: 9999999;
+    box-shadow: 0 3px 20px 0px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: 0 3px 20px 0px rgba(0, 0, 0, 0.1);
+    -webkit-box-shadow: 0 3px 20px 0px rgba(0, 0, 0, 0.1);
+    -o-box-shadow: 0 3px 20px 0px rgba(0, 0, 0, 0.1);
+    -ms-box-shadow: 0 3px 20px 0px rgba(0, 0, 0, 0.1);
+}
+.wrap-login3 {
+    width: 600px !important;
+    border-radius: 10px;
+    overflow: scroll;
+    margin: auto;
+    position: relative;
+    top: 12% !important;
+    left: 0;
+    z-index: 9999999;
+    box-shadow: 0 3px 20px 0px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: 0 3px 20px 0px rgba(0, 0, 0, 0.1);
+    -webkit-box-shadow: 0 3px 20px 0px rgba(0, 0, 0, 0.1);
+    -o-box-shadow: 0 3px 20px 0px rgba(0, 0, 0, 0.1);
+    -ms-box-shadow: 0 3px 20px 0px rgba(0, 0, 0, 0.1);
+}
+.wrap-login1 {
+    width: 600px !important;
+    border-radius: 10px;
+    overflow: scroll;
+    margin: auto;
+    position: relative;
+    top: 6% !important;
     left: 0;
     z-index: 9999999;
     box-shadow: 0 3px 20px 0px rgba(0, 0, 0, 0.1);

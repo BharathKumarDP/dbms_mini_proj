@@ -11,5 +11,5 @@ BEGIN
         (New.RequestID,New.BloodBankID,New.blood_type,New.blood_component,New.Units,l_date);
     END IF;
 END $$
-DELIMITER
+DELIMITER ;
     

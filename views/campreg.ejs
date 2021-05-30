@@ -1,4 +1,5 @@
 <%- include('header'); -%>
+
 <body>
 
     <!-- NAVBAR -->
@@ -9,39 +10,22 @@
         <span class="oi oi-menu"></span> Menu
       </button>
 
-          
+           
     </nav>
     <!-- END nav -->
 
     <div class="hero-wrap js-fullheight">
         <div class="overlay"></div>
         <div id="particles-js"></div>
-        <div class="py-3 wrap-login400 bg-white pcontainInnerHoriz">
-            <% if (message.length > 0) { %>
-                <div class="alert alert-success col-sm-12"><%= message %></div>
-                <% } %>
-            <form class="login100-form validate-form bg-white" method="post" action="/bsignup">
+        <div class="py-3 wrap-login300 bg-white pcontainInnerHoriz">
+           
+            <form class="login100-form validate-form bg-white" method="post" action="/campreg">
                 <!--Title-->
                 <span class="pb-3 pt-3 login100-form-title">
-					Blood Bank Register
+					Donate
 				</span>
                 <!--End Title-->
                 <!--Inputs-->
-                <div class="wrap-input200 validate-input m-t-10" data-validate="Enter Blood bank name">
-                    <input class="input100" type="text" name="name" placeholder="Blood Bank name">
-                    <span class="focus-input100"></span>
-                </div>
-                <div class="wrap-input200 validate-input m-t-10" data-validate="Enter password">
-                    <input class="input100" type="password" name="password" placeholder="Password">
-                    <span class="focus-input100"></span>
-                </div>
-                <div class="wrap-input200 validate-input m-t-10" data-validate="Enter license">
-                    <input class="input100" type="number" name="license" placeholder="License number">
-                    <span class="focus-input100"></span>
-                </div>
-              
-              
-               
                 <div class="container m-t-10">
                     <label>State:
                 </label>
@@ -49,7 +33,7 @@
                     <option value="Choose one" selected style="display:none">Choose one</option>
                     <option value="Andaman and Nicobar Islands">Andaman &amp; Nicobar Islands</option>
                         <option value="Andhra Pradesh">Andhra Pradesh</option>
-                        <option value="TamilNadu">TamilNadu</option>
+                        <option value="Arunachal Pradesh">Arunachal Pradesh</option>
                         <option value="Assam">Assam</option>
                         <option value="Bihar">Bihar</option>
                         <option value="Chandigarh">Chandigarh</option>
@@ -66,31 +50,15 @@
                     <input class="input100" type="text" name="city" placeholder="District">
                     <span class="focus-input100"></span>
                 </div>
-                <div class="container m-t-10">
-                    <label>Category:
-                </label>
-                    <select id="bloodType" class="d-block"  name ="cat" required> 
-                    <option value="Choose one" selected style="display:none">Choose one</option>
-                    <option value="Govt">Govt</option>
-                    <option value="Red Cross">Red Cross</option>
-                    <option value="Private">Private</option>
-                </select>
-
-                   
-                </div>
-
-                <div class="wrap-input200 validate-input m-t-10" data-validate="Enter mobile number">
-                    <input class="input100" type="number" name="contact" placeholder="Mobile number">
+               
+                <div class="wrap-input100 validate-input m-t-10" data-validate="Enter date">
+                    <label for="date">Date:</label>
+                    <input type="date" id="date" name="date" required>
                     <span class="focus-input100"></span>
                 </div>
-                <div class="wrap-input200 validate-input m-t-10" data-validate="Enter address">
-                    <input class="input100" type="text" name="address" placeholder="Address">
-                    <span class="focus-input100"></span>
-                </div>
-                <div class="wrap-input200 validate-input m-t-10" data-validate="Enter website">
-                    <input class="input100" type="text" name="website" placeholder="Website">
-                    <span class="focus-input100"></span>
-                </div>
+               
+               
+                
                 
                 
 
@@ -99,10 +67,12 @@
                 
                 <!--End Remember Me and Forgot Me-->
                 <!--Login Button-->
-                <div class="container-login100-form-btn pt-3">
+                <br>
+                <div class="container-login100-form-btn pt-2">
                     <button class="login100-form-btn btn" type="submit">
-						Register
+					  Create
 					</button>
+                  
                 </div>
                 <!--End Login Button-->
                 <!--Login with social media-->
@@ -113,3 +83,4 @@
     </div>
     <!-- loader -->
     <%- include('footer'); -%>
+    
