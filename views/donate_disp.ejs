@@ -39,7 +39,7 @@
                         <td><%=data[i].DonationID%> </td>
                         <td><%=data[i].UserID%></td>
                         <td><%=data[i].BloodBankID%></td>
-                        <td><%=data[i].date_donation%></td>
+                        <td><%=data[i].date_donation.toDateString()%></td>
                         <td><%=data[i].status%></td>
                         <td><a class="login100-form-btn btn" href="/bcomp_donations/<%= data[i].DonationID %>">
                             Complete donation

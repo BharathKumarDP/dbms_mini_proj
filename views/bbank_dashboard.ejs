@@ -2,6 +2,19 @@
     
 
 <body>
+    <script type="text/javascript">
+        const urlParams = new URLSearchParams(window.location.search);
+        const myParam = urlParams.get('msg');
+        console.log(myParam);
+        if(myParam == "Camp registered" || myParam=="No pending requests" || myParam=="Donation completed success"||myParam=="No pending donations") {
+            window.onload = setTimeout(function(){
+                alert(myParam);
+                window.location = 'http://localhost:3000/bprofile';
+            }, 200)
+           
+        }
+    
+        </script>
      <!-- NAVBAR -->
      <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
         <div class="container">

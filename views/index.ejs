@@ -1,7 +1,19 @@
 <%- include('header'); -%>
 
 <body>
-
+    <script type="text/javascript">
+        const urlParams = new URLSearchParams(window.location.search);
+        const myParam = urlParams.get('error');
+        console.log(myParam);
+        if(myParam ) {
+            window.onload = setTimeout(function(){
+                alert(myParam);
+                window.location = 'http://localhost:3000/ulogin';
+            }, 200)
+            
+        }
+    
+        </script>
     <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
         <div class="container">
@@ -18,10 +30,22 @@
         <div class="overlay"></div>
         <div id="particles-js"></div>
         <div class="py-3 wrap-login100 bg-white pcontainInnerHoriz">
-            <% if (message.length > 0) { %>
-                <div class="alert alert-success col-sm-12"><%= message %></div>
-                <% } %>
-            <form class="login100-form validate-form bg-white" method="post" action="/login">
+          
+            <form class="login100-form validate-form bg-white" method="post" action="/ulogin">
+                <% if (message.length>0) { %>
+                   
+                    
+                    <script>
+                        // stringify the data passed from router to ejs (within the EJS template only)
+                          var parsed_data = ('<%- JSON.stringify(message) %>');
+                          //alert(parsed_data);
+                          window.onload = setTimeout(function(){
+                              alert(parsed_data);
+                        }, 200)
+                         
+                     
+                    </script>
+                    <% } %>
                 <!--Title-->
                 <span class="pb-5 pt-3 login100-form-title">
 					Sign In
