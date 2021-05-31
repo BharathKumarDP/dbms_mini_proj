@@ -113,9 +113,10 @@ exports.history=function(req,res){
             }
             obj["points"]=result[0].pt
             console.log(obj);
-            res.send(obj);
+           // res.send(obj);
+            res.render('disp_health.ejs',{data:obj});
         })
-        res.render('disp_health.ejs',{data:JSON.parse(obj)});
+      
       } 
       else {
         res.redirect('/ulogin?error=' + encodeURIComponent('Not logged in'));
@@ -213,7 +214,7 @@ exports.request=function(req,res){
                         reqid=1;
                     }
                     reqid=result[0].reqID+1;
-                    db.query("INSERT INTO REQUESTS Values("+mysql.escape(reqid)+","+mysql.escape(uid)+","+mysql.escape(bbid)+","+mysql.escape(type)+","+mysql.escape(comp)+","+mysql.escape(status)+","+mysql.escape(area)+",NOW(),"+mysql.escape(units)+");",(err,result,fields)=>{
+                    db.query("INSERT INTO REQUESTS Values("+mysql.escape(reqid)+","+mysql.escape(uid)+","+mysql.escape(bbid)+","+mysql.escape(type)+","+mysql.escape(comp)+","+mysql.escape(status)+","+mysql.escape(area)+",NOW(),"+mysql.escape(units)+","+mysql.escape(reqid)+");",(err,result,fields)=>{
                         if(err){
                             console.log(err);
                             res.end(err['sqlMessage']);
@@ -245,7 +246,7 @@ exports.avail_form=function(req,res){
         console.log('you hit the authentication endpoint\n');
         const id=req.user.UserID;
         found=1;
-        res.render('blood_stock.ejs');
+        res.render('blood_stock.ejs',{message:''});
     } else {
         res.redirect('/ulogin?error=' + encodeURIComponent('Not logged in'));
         return;
@@ -267,7 +268,7 @@ exports.available=function(req,res){
     if(req.method=="GET"){ 
         if(found==1){        
             let type=req.query.bloodtype;
-            let comp=req.query.bloodcomp;
+            let comp=req.query.comp;
             let state=req.query.state;
             let city=req.query.city;
             console.log(type);
@@ -280,7 +281,7 @@ exports.available=function(req,res){
                     res.end(err['sqlMessage']);
                 }
                 console.log("Blood details shown");
-                //res.send(JSON.parse(result[0].avail));
+                console.log(result[0].avail);
                 res.render('disp.ejs',{data:JSON.parse(result[0].avail)});
             });
         }

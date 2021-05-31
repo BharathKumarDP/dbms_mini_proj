@@ -264,35 +264,45 @@ app.get("/auth/google/redirect",passport.authenticate("google",{ failureRedirect
     }
 });
 
-//user
-app.get('/usignup', user.signup);
-app.post('/usignup', user.signup);
-app.get('/ulogin', user.login);
-app.post('/ulogin', user.login);
+//user signup
+app.get('/usignup', user.signup);//to display form
+app.post('/usignup', user.signup);//to send the details with POST req
+//user login
+app.get('/ulogin', user.login);//to display form
+app.post('/ulogin', user.login);//to send login credentials through POST req
+//display user profile
 app.get('/uprofile', user.dashboard);
+//display health history of user
 app.get('/health_history',user.history);
+//to logout
 app.get('/ulogout', user.logout);
 
+//donation register
 app.get('/udonate',user.donate);
 app.post('/udonate',user.donate);
+//blood request register
 app.get('/urequest',user.request);
 app.post('/urequest',user.request);
-app.get('/uavailable',user.available);
-
+//check blood availablity
 app.get('/display_uavailable',user.avail_form);
+app.get('/uavailable',user.available);
+//check camp availablity
 app.get('/campavail',user.campavail);
 
 
 //Bbank
+//bbank signup
 app.get('/bsignup', bbank.bsignup);
 app.post('/bsignup',  bbank.bsignup);
+//bbank login
 app.get('/blogin',  bbank.blogin);
 app.post('/blogin',  bbank.blogin);
-
+//display bank profile
 app.get('/bprofile', bbank.bdashboard);
+//display and fill form to register a camp
 app.get('/campreg',  bbank.campreg);
 app.post('/campreg',  bbank.campreg);
-
+//to display blood availability
 app.get('/bavailable',  bbank.bavailable);
 
 //donations
@@ -305,9 +315,12 @@ app.post('/bcomp_donations/:id',bbank.bcomp_donations);//complete the donation
 app.get('/brequests',  bbank.brequests);//list requests
 app.get('/bserve_requests',  bbank.bserve_requests);//serve requests
 
-
-
+//logout
 app.get('/blogout', bbank.blogout);
+
+
+
+
 app.listen(3000,()=>{
     console.log('app is listening on port 3000');
 });

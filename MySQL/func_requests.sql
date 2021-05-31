@@ -87,7 +87,7 @@ BEGIN
             END block1;
         END IF;
     END LOOP blood_loop;
-    DELETE from Requests where status="Removed";
+  
     RETURN l_count;
 END$$
 DELIMITER ;    

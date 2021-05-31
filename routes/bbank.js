@@ -158,7 +158,7 @@ exports.bdonations=function(req,res){
     }
     if(found==1){
             let bbid=req.user.BloodBankID; 
-            db.query("SELECT * FROM DONATIONS WHERE BloodBankID="+mysql.escape(bbid)+"AND status='Pending';" ,(err,result,field)=>{
+            db.query("SELECT * FROM DONATIONS WHERE BloodBankID="+mysql.escape(bbid)+" AND status='Pending';" ,(err,result,field)=>{
             if(err){
                 console.log(err);
                 res.end(err['sqlMessage']);
@@ -258,13 +258,13 @@ exports.brequests=function(req,res){
         }
         if(found==1){
             let bbid=req.user.BloodBankID;
-            db.query("SELECT * FROM Requests WHERE BloodBankID="+mysql.escape(bbid)+"AND Status='Pending';",(err,result,field)=>{
+            db.query("SELECT * FROM Requests WHERE BloodBankID="+mysql.escape(bbid)+" AND Status='Pending';",(err,result,field)=>{
             if(err){
                 console.log(err);
                 res.end(err['sqlMessage']);
             }
             if(result.length){        
-                //console.log(result);
+                console.log(result);
                 res.render('req_disp.ejs',{data:result});
                   //display static page of donations list
                   //function to loop through donations and if data matches update availability status
