@@ -21,8 +21,6 @@ exports.signup=function(req,res){
                             console.log(err);
                             res.end(err['sqlMessage']);
                         }
-                        message = "Your account has been created succesfully.";
-                        res.render('msg.ejs',{message:message,id:id});
                     });
                     db.query("INSERT INTO health_history Values("+mysql.escape(id)+","+mysql.escape(type)+","+mysql.escape(sugar)+","+mysql.escape(bp)+","+mysql.escape(ht)+","+mysql.escape(wt)+","+mysql.escape(ailments)+",NULL);",(err,result,fields)=>{
                         if(err){
@@ -30,7 +28,10 @@ exports.signup=function(req,res){
                             res.end(err['sqlMessage']);
                         }
                        console.log('User'+id+'health history created ');
+                       message = "Your account has been created succesfully.";
+                       res.render('msg.ejs',{message:message,id:id});
                     });
+                   
                 });
             });
         });
@@ -45,6 +46,12 @@ exports.login=function(req,res,next){
     if(req.method=="POST"){
     var message='';     
     passport.authenticate('user', (err, user, info) => {
+        if(!user)
+        {  
+            console.log(info.message);
+            res.redirect('/ulogin?error=' + encodeURIComponent(info.message));
+            return; 
+        }
         req.login(user, (err) => {
           if(req.user){
             console.log(`req.user: ${JSON.stringify(req.user)}`)
@@ -151,10 +158,14 @@ exports.donate=function(req,res){
                 }
                 let did=result[0].did+1;
                 //console.log(did,"created");
-                db.query("SELECT BloodBankID as bid FROM blood_bank WHERE Name="+mysql.escape(bname)+";",(err,ress,fields)=>{
+                db.query("SELECT BloodBankID as bid FROM blood_bank WHERE Name="+mysql.escape(bname)+" ;",(err,ress,fields)=>{
                     if(err){
                         console.log(err);
                         res.end(err['sqlMessage']);
+                    }
+                    if(ress.length==0){
+                        res.redirect('/uprofile?msg=' + encodeURIComponent('No such blood bank available'));
+                        return;
                     }
                     console.log(ress);
                     let bbid=ress[0].bid;
@@ -205,6 +216,10 @@ exports.request=function(req,res){
         if(found==1){
             const {type,comp,units,area,name}=req.body;
             db.query("SELECT BloodbankID as bid FROM blood_bank WHERE NAME="+mysql.escape(name)+";",(err,result,fields)=>{
+                if(result.length==0){
+                    res.redirect('/uprofile?msg=' + encodeURIComponent('No such blood bank available'));
+                    return;
+                }
                 var bbid=result[0].bid;
                 var status="Pending";
                 var uid=req.user.UserID;

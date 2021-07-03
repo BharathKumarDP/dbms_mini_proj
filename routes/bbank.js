@@ -36,7 +36,7 @@ exports.bsignup=function(req,res){
                             res.end(err['sqlMessage']);
                         }
                         message = "Your account has been created succesfully.";
-                        res.render('bmsg.ejs',{message: message});
+                        res.render('bmsg.ejs',{message: message,id:id});
                         //res.end(1);
                     });
                     })
@@ -57,6 +57,12 @@ exports.blogin=function(req,res,next){
     if(req.method=="POST"){
         var message='';     
         passport.authenticate('bbank', (err, user, info) => {
+            if(!user)
+            {  
+                console.log(info.message);
+                res.redirect('/blogin?error=' + encodeURIComponent(info.message));
+                return; 
+            }
             req.login(user, (err) => {
               if(req.user){
                 console.log(`req.user: ${JSON.stringify(req.user)}`)
@@ -232,7 +238,7 @@ exports.bserve_requests=function(req,res){
                 message=resu[0].n_req+"request served";
                 console.log(resu[0].n_req+"requests served");
                 //res.send(resu[0].n_req+"requests served");//flash
-                res.redirect('/brequests?msg=' + encodeURIComponent(message));
+                res.redirect('/bprofile?msg=' + encodeURIComponent(message));
             }
         });
         //function to loop through requests and see if it can be served. Simulatneously trigger to decrease availablity status and 

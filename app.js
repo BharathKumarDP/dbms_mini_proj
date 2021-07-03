@@ -61,7 +61,7 @@ passport.use(
             }
             if(result.length==0){
                console.log("User doesn't exist");
-                return done(null,false);
+                return done(null,false,{ message: "User doesn't exist" });
             }
             else{
                return done(null,result[0]);
@@ -250,7 +250,7 @@ app.get("/auth/google", passport.authenticate("google", {
     scope: ["profile", "email"]
 }));
 
-app.get("/auth/google/redirect",passport.authenticate("google",{ failureRedirect: '/ulogin' }),(req,res)=>{
+app.get("/auth/google/redirect",passport.authenticate("google",{ failureRedirect: '/ulogin?error=' + encodeURIComponent('Wrong email') }),(req,res)=>{
     if(!req.user){
         console.log("error");
         res.redirect('/ulogin?error=' + encodeURIComponent('Wrong email'));

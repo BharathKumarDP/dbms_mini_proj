@@ -5,9 +5,9 @@
     const urlParams = new URLSearchParams(window.location.search);
     const myParam = urlParams.get('error');
     console.log(myParam);
-    if(myParam == "Not logged in") {
+    if(myParam ) {
         window.onload = setTimeout(function(){
-            alert("Not logged in");
+            alert(myParam);
             window.location = 'http://localhost:3000/blogin';
         }, 200)
         
@@ -17,7 +17,7 @@
     <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
         <div class="container">
-            <a class="navbar-brand" href="index.html"> Blood Bank <i class="icon-heart" aria-hidden="true"></i></a>
+            <a class="navbar-brand" href="index.html"> Red Mate <i class="icon-heart" aria-hidden="true"></i></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="oi oi-menu"></span> Menu
       </button>
